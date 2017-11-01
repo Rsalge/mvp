@@ -7,7 +7,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      turns: ['JHello','Hi']
+      turns: ['JHello','Hi'],
+      playerCount: 0
     }
   }
 
@@ -25,9 +26,19 @@ class App extends React.Component {
     });
   }
 
+  handleSubmit(data) {
+      console.log('submit data: ', data.target.value);
+  }
+
   render () {
     return (<div>
       <h1>Settlers Tracker</h1>
+      <input
+        type="number"
+         id="playerCount"
+        //  value={this.state.playerCount}
+         onChange={this.handleSubmit.bind(this)}
+       />
       <List turns={this.state.turns}/>
     </div>)
   }
