@@ -7,16 +7,16 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: []
+      turns: ['JHello']
     }
   }
 
   componentDidMount() {
     $.ajax({
-      url: '/items',
+      url: '/turns',
       success: (data) => {
         this.setState({
-          items: data
+          turns: data
         })
       },
       error: (err) => {
@@ -28,7 +28,7 @@ class App extends React.Component {
   render () {
     return (<div>
       <h1>Settlers Tracker</h1>
-      <List items={this.state.items}/>
+      <List turns={this.state.turns}/>
     </div>)
   }
 }

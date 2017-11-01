@@ -1,8 +1,11 @@
 import React from 'react';
-
+//Each list item will be a players scorecard for a specific turn
 const ListItem = (props) => (
   <div>
-    { props.item.description }
+    <ul>
+      <li>{ props.turn }</li>
+      <li>{ props.turn }</li>
+    </ul>
   </div>
 )
 
