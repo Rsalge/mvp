@@ -7,7 +7,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      turns: ['JHello']
+      turns: ['JHello','Hi']
     }
   }
 
