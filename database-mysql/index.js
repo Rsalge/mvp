@@ -17,4 +17,13 @@ var selectAll = function(callback) {
   });
 };
 
+var saveTurn = function(params, callback) {
+  var queryStr = 'INSERT INTO turns(playerId, diceRoll, victoryPoints, \
+                  settlements, cities, roadLength, knightCount, turn) \
+                  value (?, ?, ?, ?, ?, ?, ?, ?)'
+  connection.query(queryStr, params, function(err, results) {
+    callback(err, results);
+  });
+}
+
 module.exports.selectAll = selectAll;
