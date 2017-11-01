@@ -18,12 +18,18 @@ Once the project moves into development, the press release can be used as a touc
  
 ## Heading ##
   > Name the product in a way the reader (i.e. your target customers) will understand.
+  
+  Settlers Tracker! An app that is used to track the score of each player as you play a game of Settlers of Catan. 
 
 ## Sub-Heading ##
   > Describe who the market for the product is and what benefit they get. One sentence only underneath the title.
+  
+  For those Catan players who want to look back on a game and see statistics like number of 8s rolled, who ended up with the longest road.and how long it was, and even track otger players(shown) victory points as you are playing the game. 
 
 ## Summary ##
   > Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good.
+  
+  
 
 ## Problem ##
   > Describe the problem your product solves.
