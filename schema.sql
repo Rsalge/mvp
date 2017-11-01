@@ -11,7 +11,7 @@ CREATE TABLE player (
   settlements integer NOT NULL,
   cities integer NOT NULL,
   roadLength integer NOT NULL,
-  knightCount integer NOT NULL
+  knightCount integer NOT NULL,
   PRIMARY KEY (ID)
 );
 
