@@ -10,7 +10,7 @@ class App extends React.Component {
     this.state = {
       turns: ['JHello','Hi'],
       playerCount: 0,
-      players: Array(7).fill(''),
+      players: [],
       showForm: true
     }
   }
@@ -34,7 +34,8 @@ class App extends React.Component {
       console.log('PLayerCOunt: ', this.state.playerCount);
 
       this.setState({
-        showForm: !this.state.showForm
+        showForm: !this.state.showForm,
+        players: Array(Number(this.state.playerCount)).fill('')
       })
   }
 
