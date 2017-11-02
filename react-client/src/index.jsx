@@ -45,6 +45,17 @@ class App extends React.Component {
     });
   }
 
+  startTracking(data) {
+    var firstPlayer = this.state.players.slice();
+    firstPlayer = firstPlayer[0];
+    this.setState({
+      showPlayerInput: !this.state.showPlayerInput,
+      showTurn: !this.state.showTurn,
+      currentPlayer: firstPlayer,
+      currentTurn: 1
+    })
+  }
+
   handleClick(data) {
       var count = Number(this.state.playerCount);
       if (count > 7) {
@@ -124,27 +135,46 @@ class App extends React.Component {
   }
 
   handleNextTurn(data) {
-    console.log("Next Turn");
+
     var turn = Object.assign({},this.state.turn);
     $.post('/turns', turn, function(data, status) {
       console.log('POST REQUEST RETURNED');
     })
-
-  }
-
-  startTracking(data) {
-    console.log('PLAYERS: ', this.state.players);
-    var firstPlayer = this.state.players.slice();
-    firstPlayer = firstPlayer[0];
+    var players = this.state.players.slice()
+    var nextPlayerIndex = players.indexOf(this.state.currentPlayer);
+    console.log('PLAYER INDEX', nextPlayerIndex);
+    nextPlayerIndex++;
+    var nextPlayer = 0;
+    if(nextPlayerIndex > players.length - 1) {
+      console.log('BACK TO P1');
+      console.log('PLAYER ARRAY: ', players);
+      nextPlayer = players[0]
+    } else{
+      nextPlayer = players[nextPlayerIndex]
+    }
+    console.log('PLAYERS: ', nextPlayer);
     this.setState({
-      showPlayerInput: !this.state.showPlayerInput,
-      showTurn: !this.state.showTurn,
-      currentPlayer: firstPlayer,
-      currentTurn: 1
+      currentPlayer: nextPlayer
     })
 
-
   }
+
+  displayTurns(data) {
+    //skeleton for now, needs work
+    $.ajax({
+      url: '/turns',
+      success: (data) => {
+        console.log('TURN DATA: ', data);
+        this.setState({
+          turn: data
+        })
+      },
+      error: (err) => {
+        console.log('err', err);
+      }
+    });
+  }
+
 
   render () {
     const style = { display: this.state.showForm ? 'inline' : 'none' }
