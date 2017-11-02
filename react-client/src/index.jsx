@@ -11,7 +11,10 @@ class App extends React.Component {
       turns: ['JHello','Hi'],
       playerCount: 0,
       players: [],
-      showForm: true
+      showForm: true,
+      showPlayerInput: false,
+      showTurn: false,
+      turn: {playerName:'', diceRoll: 0, victoryPoints: 0, settlements: 0, cities: 0, roadLength:0, knightCount:0, turnNum: 0}
     }
   }
 
@@ -30,12 +33,14 @@ class App extends React.Component {
   }
 
   handleClick(data) {
-      console.log('submit data: ', data.target.value);
-      console.log('PLayerCOunt: ', this.state.playerCount);
-
+      var count = Number(this.state.playerCount);
+      if (count > 7) {
+        count = 7;
+      }
       this.setState({
         showForm: !this.state.showForm,
-        players: Array(Number(this.state.playerCount)).fill('')
+        showPlayerInput: !this.state.showPlayerInput,
+        players: Array(count).fill('')
       })
   }
 
@@ -44,6 +49,7 @@ class App extends React.Component {
       playerCount: data.target.value
     })
   }
+
   updatePlayerName(player, data) {
     var newPlayer = this.state.players.slice();
     newPlayer[player] = data.target.value;
@@ -54,16 +60,20 @@ class App extends React.Component {
 
   handleSubmit(data) {
     data.preventDefault();
-
   }
 
   startTracking(data) {
     console.log('PLAYERS: ', this.state.players);
+    this.setState({
+      showPlayerInput: !this.state.showPlayerInput,
+      showTurn: !this.state.showTurn
+    })
+
   }
 
   render () {
     const style = { display: this.state.showForm ? 'inline' : 'none' }
-    const enterPlayerNames = {display: !this.state.showForm ? 'inline' : 'none' }
+    const enterPlayerNames = {display: this.state.showPlayerInput ? 'inline' : 'none' }
     return (<div>
       <h1>Settlers Tracker</h1>
       <form style={style} onSubmit={this.handleSubmit.bind(this)}>
@@ -92,6 +102,7 @@ class App extends React.Component {
         {this.state.players.map((player, index) => (
           <input
             type="text"
+            className="playerInput"
             value={player}
             onChange={this.updatePlayerName.bind(this, index)}
           />
