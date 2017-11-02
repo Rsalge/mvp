@@ -175,15 +175,23 @@ class App extends React.Component {
     console.log('ALL PREVIOUS TURNS: ', playerTurns);
 
     var previousTurn = playerTurns.filter((indivTurn) => {
+      console.log('INDIV TURN: ', indivTurn.turn, ' LastTurn', lastTurn);
       return indivTurn.turn === lastTurn;
     })
-    console.log('PEVIOUS TURN: ', previousTurn);
-    previousTurn = JSON.stringify(previousTurn[0]);
+    console.log('PEVIOUS TURN: ', previousTurn[0]);
     if(previousTurn) {
       console.log('SET PREVIOUS TURN');
-      this.setState({
-        turn: previousTurn
-      })
+      // previousTurn = JSON.stringify(previousTurn);
+      var turn = Object.assign({},this.state.turn);
+      // turn.diceRoll = previousTurn.diceRoll;
+      if(lastTurn > 0) {
+        console.log('SET TURN STATE');
+        previousTurn[0].diceRoll = 0;
+        previousTurn[0].turn = this.state.turn.turn;
+        this.setState({
+          turn: previousTurn[0]
+        })
+      }
     }
   }
 
