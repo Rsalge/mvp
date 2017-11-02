@@ -4,7 +4,7 @@ import ListItem from './ListItem.jsx';
 const List = (props) => (
     <div>
       {console.log('TURN DATA: ', props.turns)}
-      { props.turns.map(turn => <ListItem turn={turn}/>)}
+      { props.turns.slice().reverse().map(turn => <ListItem turn={turn}/>)}
     </div>
 )
 
