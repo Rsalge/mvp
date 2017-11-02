@@ -18,7 +18,7 @@ class App extends React.Component {
         cities: 0,
         roadLength:1,
         knightCount:0,
-        turnNum: 0
+        turn: 0
       },
       playerCount: 0,
       players: [],
@@ -35,7 +35,7 @@ class App extends React.Component {
     firstPlayer = firstPlayer[0];
     var temp = Object.assign({}, this.state.turn);
     temp.playerName = firstPlayer;
-    temp.turnNum = 1;
+    temp.turn = 1;
     this.setState({
       showPlayerInput: !this.state.showPlayerInput,
       showTurn: !this.state.showTurn,
@@ -126,14 +126,13 @@ class App extends React.Component {
 
     var turn = Object.assign({},this.state.turn);
     $.post('/turns', turn, (data, status) => {
-      console.log('posted turn: ', data)
       var players = this.state.players.slice()
       var nextPlayerIndex = players.indexOf(this.state.currentPlayer);
       nextPlayerIndex++;
       var nextPlayer = 0;
       if(nextPlayerIndex > players.length - 1) {
         nextPlayer = players[0]
-        turn.turnNum = turn.turnNum + 1;
+        turn.turn = turn.turn + 1;
         this.setState({
           turn: turn
         })
@@ -166,17 +165,33 @@ class App extends React.Component {
 
   getLastTurn() {
     var turns = this.state.pastTurns.slice();
+    var lastTurn = this.state.turn.turn - 1;
+
     var playerTurns = turns.filter(( turn ) => {
-      console.log('PAST TURN player: ', turn.playerName);
       var past = JSON.stringify(turn.playerName);
       var current = JSON.stringify(this.state.currentPlayer);
-      console.log('CURRENT PLAYER:, ' ,this.state.currentPlayer);
-      if (past === current) {
-        console.log('PLAYER NAME EQUAL');
-      }
       return past === current;
     })
-    console.log('PLAYER TURNS: ', playerTurns);
+    console.log('ALL PREVIOUS TURNS: ', playerTurns);
+
+    var previousTurn = playerTurns.filter((indivTurn) => {
+      return indivTurn.turn === lastTurn;
+    })
+    console.log('PEVIOUS TURN: ', previousTurn);
+    previousTurn = JSON.stringify(previousTurn[0]);
+    if(previousTurn) {
+      console.log('SET PREVIOUS TURN');
+      this.setState({
+        turn: previousTurn
+      })
+    }
+  }
+
+  clearTable() {
+    console.log('clearing table')
+    $.post('/clear', {name: 'asdf'}, function(data) {
+      console.log('POST SUCCESS: ', data)
+    });
   }
 
 
@@ -187,7 +202,7 @@ class App extends React.Component {
     const turnStyle = {display: this.state.showTurn ? 'inline' : 'none' }
     return (<div>
       <h1>Settlers Tracker</h1>
-
+      <div><input type="button" value='Clear history' onClick={this.clearTable.bind(this)}/></div>
       <form style={style} onSubmit={this.handleSubmit.bind(this)}>
         <label>
           Number of players
@@ -295,7 +310,7 @@ class App extends React.Component {
                 onChange={this.handleKnightChange.bind(this)}
               />
             </td>
-            <td>{this.state.turn.turnNum}</td>
+            <td>{this.state.turn.turn}</td>
             <td><input type="button" value="Next Turn" onClick={this.handleNextTurn.bind(this)} /></td>
           </tr>
         </tbody>

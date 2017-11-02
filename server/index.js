@@ -10,6 +10,7 @@ app.use(express.static(__dirname + '/../react-client/dist'));
 
 
 app.get('/turns', function (req, res) {
+  console.log("INSIDE GET TURNS");
   turns.selectAll(function(err, data) {
     if(err) {
       res.sendStatus(500);
@@ -21,7 +22,7 @@ app.get('/turns', function (req, res) {
 
 app.post('/turns',function (req, res) {
   var data = req.body;
-  var params = [data.playerName, data.diceRoll, data.victoryPoints, data.settlements, data.cities, data.roadLength, data.knightCount, data.turnNum]
+  var params = [data.playerName, data.diceRoll, data.victoryPoints, data.settlements, data.cities, data.roadLength, data.knightCount, data.turn]
   turns.saveTurn(params, function (err, results) {
     if(err) {
       console.log('ERROR POSTING:', err);
@@ -31,10 +32,13 @@ app.post('/turns',function (req, res) {
       res.status(201).send(results)
     }
   })
+
 })
 
-app.get('/lastTurn', function (req, res) {
-  turns.getLastTurn(function(err, data) {
+app.post('/clear', function (req, res) {
+  console.log('CALLING CLEAR TABLE');
+  console.log(turns)
+  turns.clearTable(function(err, data) {
     if (err) {
       res.sendStatus(500);
     } else {
