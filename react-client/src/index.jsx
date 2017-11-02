@@ -4,6 +4,8 @@ import $ from 'jquery';
 import List from './components/List.jsx';
 import PlayerList from './components/playerList.jsx';
 
+
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -123,6 +125,11 @@ class App extends React.Component {
 
   handleNextTurn(data) {
     console.log("Next Turn");
+    var turn = Object.assign({},this.state.turn);
+    $.post('/turns', turn, function(data, status) {
+      console.log('POST REQUEST RETURNED');
+    })
+
   }
 
   startTracking(data) {
@@ -135,6 +142,7 @@ class App extends React.Component {
       currentPlayer: firstPlayer,
       currentTurn: 1
     })
+
 
   }
 
@@ -253,7 +261,7 @@ class App extends React.Component {
               />
             </td>
             <td>{this.state.currentTurn}</td>
-            <td><input type="button" value="Next Turn" onClick={this.handleNextTurn} /></td>
+            <td><input type="button" value="Next Turn" onClick={this.handleNextTurn.bind(this)} /></td>
           </tr>
         </tbody>
       </table>

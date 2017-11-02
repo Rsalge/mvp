@@ -19,6 +19,11 @@ app.get('/turns', function (req, res) {
   });
 });
 
+app.post('/turns',function (req, res) {
+  console.log('CAUGHT THE POST');
+  turns.saveTurn(err)
+})
+
 app.listen(3000, function() {
   console.log('listening on port 3000!');
 });

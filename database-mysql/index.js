@@ -18,7 +18,7 @@ var selectAll = function(callback) {
 };
 
 var saveTurn = function(params, callback) {
-  var queryStr = 'INSERT INTO turns(playerId, diceRoll, victoryPoints, \
+  var queryStr = 'INSERT INTO turns(playerName, diceRoll, victoryPoints, \
                   settlements, cities, roadLength, knightCount, turn) \
                   value (?, ?, ?, ?, ?, ?, ?, ?)'
   connection.query(queryStr, params, function(err, results) {
@@ -27,3 +27,4 @@ var saveTurn = function(params, callback) {
 }
 
 module.exports.selectAll = selectAll;
+module.exports.saveTurn = saveTurn;
