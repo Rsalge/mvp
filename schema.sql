@@ -13,7 +13,7 @@ CREATE TABLE players (
 
 CREATE TABLE turns (
   id integer NOT NULL AUTO_INCREMENT,
-  playerId integer NOT NULL,
+  playerName varchar(255),
   diceRoll integer NOT NULL,
   victoryPoints integer NOT NULL,
   settlements integer NOT NULL,
@@ -21,8 +21,7 @@ CREATE TABLE turns (
   roadLength integer NOT NULL,
   knightCount integer NOT NULL,
   turn integer NOT NULL,
-  PRIMARY KEY (ID),
-  FOREIGN KEY (playerId) REFERENCES players(id)
+  PRIMARY KEY (ID)
 );
 
 

@@ -8,21 +8,23 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      turns: [],
+      turn: {
+        playerName:'',
+        diceRoll: 0,
+        victoryPoints: 0,
+        settlements: 0,
+        cities: 0,
+        roadLength:0,
+        knightCount:0,
+        turnNum: 0
+      },
       playerCount: 0,
       players: [],
       currentPlayer: '',
       showForm: true,
       showPlayerInput: false,
       showTurn: false,
-      playerName:'',
-      diceRoll: 0,
-      victoryPoints: 0,
-      settlements: 0,
-      cities: 0,
-      roadLength:0,
-      knightCount:0,
-      turnNum: 0
+      currentTurn: 0
     }
   }
 
@@ -30,8 +32,9 @@ class App extends React.Component {
     $.ajax({
       url: '/turns',
       success: (data) => {
+        console.log('TURN DATA: ', data);
         this.setState({
-          turns: data
+          turn: data
         })
       },
       error: (err) => {
@@ -59,38 +62,50 @@ class App extends React.Component {
   }
 
   handleDiceChange(data) {
+    var temp = Object.assign({}, this.state.turn);
+    temp.diceRoll = data.target.value;
     this.setState({
-      diceRoll: data.target.value
+      turn: temp
     })
   }
 
   handleVictoryPointsChange(data) {
+    var temp = Object.assign({}, this.state.turn);
+    temp.victoryPoints = data.target.value;
     this.setState({
-      victoryPoints: data.target.value
+      victoryPoints: temp
     })
   }
 
   handleSettlementsChange(data) {
+    var temp = Object.assign({}, this.state.turn);
+    temp.settlements = data.target.value;
     this.setState({
-      settlements: data.target.value
+      settlements: temp
     })
   }
 
   handleCitiesChange(data) {
+    var temp = Object.assign({}, this.state.turn);
+    temp.cities = data.target.value;
     this.setState({
-      cities: data.target.value
+      cities: temp
     })
   }
 
   handleRoadChange(data) {
+    var temp = Object.assign({}, this.state.turn);
+    temp.roadLength = data.target.value;
     this.setState({
-      roadLength: data.target.value
+      roadLength: temp
     })
   }
 
   handleKnightChange(data) {
+    var temp = Object.assign({}, this.state.turn);
+    temp.knightCount = data.target.value;
     this.setState({
-      knightCount: data.target.value
+      knightCount: temp
     })
   }
 
@@ -106,6 +121,10 @@ class App extends React.Component {
     data.preventDefault();
   }
 
+  handleNextTurn(data) {
+    console.log("Next Turn");
+  }
+
   startTracking(data) {
     console.log('PLAYERS: ', this.state.players);
     var firstPlayer = this.state.players.slice();
@@ -113,7 +132,8 @@ class App extends React.Component {
     this.setState({
       showPlayerInput: !this.state.showPlayerInput,
       showTurn: !this.state.showTurn,
-      currentPlayer: firstPlayer
+      currentPlayer: firstPlayer,
+      currentTurn: 1
     })
 
   }
@@ -175,6 +195,7 @@ class App extends React.Component {
             <th>Road Length</th>
             <th>Knight Count</th>
             <th>Turn Number</th>
+            <th>Next Turn</th>
           </tr>
           <tr>
             <td>{this.state.currentPlayer}</td>
@@ -183,7 +204,7 @@ class App extends React.Component {
                 type="number"
                 min="2"
                 max="12"
-                value={this.state.diceRoll}
+                value={this.state.turn.diceRoll}
                 onChange={this.handleDiceChange.bind(this)}
               />
             </td>
@@ -191,52 +212,52 @@ class App extends React.Component {
               <input
                 type="number"
                 min="2"
-                value={this.state.victoryPoints}
+                value={this.state.turn.victoryPoints}
                 onChange={this.handleVictoryPointsChange.bind(this)}
               />
             </td>
             <td>
               <input
                 type="number"
-                min="2"
-                max="12"
-                value={this.state.settlements}
+                min="0"
+                max="5"
+                value={this.state.turn.settlements}
                 onChange={this.handleSettlementsChange.bind(this)}
               />
             </td>
             <td>
               <input
                 type="number"
-                min="2"
-                max="12"
-                value={this.state.cities}
+                min="0"
+                max="4"
+                value={this.state.turn.cities}
                 onChange={this.handleCitiesChange.bind(this)}
               />
             </td>
             <td>
               <input
                 type="number"
-                min="2"
-                max="12"
-                value={this.state.roadLength}
+                min="1"
+                max="15"
+                value={this.state.turn.roadLength}
                 onChange={this.handleRoadChange.bind(this)}
               />
             </td>
             <td>
               <input
                 type="number"
-                min="2"
-                max="12"
-                value={this.state.knightCount}
+                min="0"
+                max="14"
+                value={this.state.turn.knightCount}
                 onChange={this.handleKnightChange.bind(this)}
               />
             </td>
             <td>{this.state.currentTurn}</td>
+            <td><input type="button" value="Next Turn" onClick={this.handleNextTurn} /></td>
           </tr>
         </tbody>
       </table>
-
-      <List turns={this.state.turns}/>
+      {/* <List turns={this.state.turns}/> */}
     </div>)
   }
 }

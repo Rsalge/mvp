@@ -4,7 +4,6 @@ import ListItem from './ListItem.jsx';
 const List = (props) => (
   <div>
     <h4> Scoreboard </h4>
-    There are { props.turns.length } turns.
     { props.turns.map(turn => <ListItem turn={turn}/>)}
   </div>
 )
