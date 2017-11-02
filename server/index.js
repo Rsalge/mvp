@@ -20,11 +20,9 @@ app.get('/turns', function (req, res) {
 });
 
 app.post('/turns',function (req, res) {
-  console.log('CAUGHT THE POST', req.body);
   var data = req.body;
-  var params = [data[0].playerName, data[0].diceRoll, data[0].victoryPoints, data[0].settlements, data[0].cities, data[0].roadLength, data[0].knightCount, data[0].turn]
+  var params = [data.playerName, data.diceRoll, data.victoryPoints, data.settlements, data.cities, data.roadLength, data.knightCount, data.turnNum]
   turns.saveTurn(params, function (err, results) {
-    console.log('INSIDE SAVE TURN CALLBACK');
   })
 })
 

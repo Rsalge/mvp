@@ -12,11 +12,11 @@ class App extends React.Component {
     this.state = {
       turn: {
         playerName:'',
-        diceRoll: 0,
-        victoryPoints: 0,
-        settlements: 0,
+        diceRoll: 2,
+        victoryPoints: 2,
+        settlements: 2,
         cities: 0,
-        roadLength:0,
+        roadLength:1,
         knightCount:0,
         turnNum: 0
       },
@@ -26,33 +26,21 @@ class App extends React.Component {
       showForm: true,
       showPlayerInput: false,
       showTurn: false,
-      currentTurn: 0
+      pastTurns: []
     }
-  }
-
-  componentDidMount() {
-    $.ajax({
-      url: '/turns',
-      success: (data) => {
-        console.log('TURN DATA: ', data);
-        this.setState({
-          turn: data
-        })
-      },
-      error: (err) => {
-        console.log('err', err);
-      }
-    });
   }
 
   startTracking(data) {
     var firstPlayer = this.state.players.slice();
     firstPlayer = firstPlayer[0];
+    var temp = Object.assign({}, this.state.turn);
+    temp.playerName = firstPlayer;
+    temp.turnNum = 1;
     this.setState({
       showPlayerInput: !this.state.showPlayerInput,
       showTurn: !this.state.showTurn,
       currentPlayer: firstPlayer,
-      currentTurn: 1
+      turn: temp
     })
   }
 
@@ -86,7 +74,7 @@ class App extends React.Component {
     var temp = Object.assign({}, this.state.turn);
     temp.victoryPoints = data.target.value;
     this.setState({
-      victoryPoints: temp
+      turn: temp
     })
   }
 
@@ -94,7 +82,7 @@ class App extends React.Component {
     var temp = Object.assign({}, this.state.turn);
     temp.settlements = data.target.value;
     this.setState({
-      settlements: temp
+      turn: temp
     })
   }
 
@@ -102,7 +90,7 @@ class App extends React.Component {
     var temp = Object.assign({}, this.state.turn);
     temp.cities = data.target.value;
     this.setState({
-      cities: temp
+      turn: temp
     })
   }
 
@@ -110,7 +98,7 @@ class App extends React.Component {
     var temp = Object.assign({}, this.state.turn);
     temp.roadLength = data.target.value;
     this.setState({
-      roadLength: temp
+      turn: temp
     })
   }
 
@@ -118,7 +106,7 @@ class App extends React.Component {
     var temp = Object.assign({}, this.state.turn);
     temp.knightCount = data.target.value;
     this.setState({
-      knightCount: temp
+      turn: temp
     })
   }
 
@@ -138,33 +126,51 @@ class App extends React.Component {
 
     var turn = Object.assign({},this.state.turn);
     $.post('/turns', turn, function(data, status) {
-      console.log('POST REQUEST RETURNED');
     })
     var players = this.state.players.slice()
     var nextPlayerIndex = players.indexOf(this.state.currentPlayer);
-    console.log('PLAYER INDEX', nextPlayerIndex);
     nextPlayerIndex++;
     var nextPlayer = 0;
     if(nextPlayerIndex > players.length - 1) {
-      console.log('BACK TO P1');
-      console.log('PLAYER ARRAY: ', players);
       nextPlayer = players[0]
+      turn.turnNum = turn.turnNum + 1;
+      this.setState({
+        turn: turn
+      })
     } else{
       nextPlayer = players[nextPlayerIndex]
     }
-    console.log('PLAYERS: ', nextPlayer);
+    turn.playerName = nextPlayer
     this.setState({
+      turn: turn,
       currentPlayer: nextPlayer
     })
-
+    this.getPastTurns();
   }
+
+  getPastTurns() {
+    console.log('INSIDE PAST TURNS');
+    $.ajax({
+      url: '/turns',
+      success: (data) => {
+        console.log('PAST TURN DATA', data);
+        this.setState({
+          pastTurns: data
+        })
+      },
+      error: (err) => {
+        console.log('err', err);
+      }
+    });
+    console.log('PAST TURN DATA: ', this.state.pastTurns);
+  }
+
 
   displayTurns(data) {
     //skeleton for now, needs work
     $.ajax({
       url: '/turns',
       success: (data) => {
-        console.log('TURN DATA: ', data);
         this.setState({
           turn: data
         })
@@ -290,12 +296,12 @@ class App extends React.Component {
                 onChange={this.handleKnightChange.bind(this)}
               />
             </td>
-            <td>{this.state.currentTurn}</td>
+            <td>{this.state.turn.turnNum}</td>
             <td><input type="button" value="Next Turn" onClick={this.handleNextTurn.bind(this)} /></td>
           </tr>
         </tbody>
       </table>
-      {/* <List turns={this.state.turns}/> */}
+      <List turns={this.state.pastTurns}/>
     </div>)
   }
 }
