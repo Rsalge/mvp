@@ -146,15 +146,14 @@ class App extends React.Component {
         currentPlayer: nextPlayer
       })
       this.getPastTurns();
+      this.getLastTurn();
     })
   }
 
   getPastTurns() {
-    console.log('INSIDE PAST TURNS');
     $.ajax({
       url: '/turns',
       success: (data) => {
-        console.log('PAST TURN DATA', data);
         this.setState({
           pastTurns: data
         })
@@ -163,9 +162,22 @@ class App extends React.Component {
         console.log('err', err);
       }
     });
-    console.log('PAST TURN DATA: ', this.state.pastTurns);
   }
 
+  getLastTurn() {
+    var turns = this.state.pastTurns.slice();
+    var playerTurns = turns.filter(( turn ) => {
+      console.log('PAST TURN player: ', turn.playerName);
+      var past = JSON.stringify(turn.playerName);
+      var current = JSON.stringify(this.state.currentPlayer);
+      console.log('CURRENT PLAYER:, ' ,this.state.currentPlayer);
+      if (past === current) {
+        console.log('PLAYER NAME EQUAL');
+      }
+      return past === current;
+    })
+    console.log('PLAYER TURNS: ', playerTurns);
+  }
 
 
 
