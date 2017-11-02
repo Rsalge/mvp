@@ -8,3 +8,9 @@ table {
 th, td {
   border: 1px solid black;
 }
+
+tbody {
+  display: table-row-group;
+  vertical-align: middle;
+  border-color: inherit;
+}

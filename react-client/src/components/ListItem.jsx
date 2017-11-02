@@ -3,7 +3,6 @@ import React from 'react';
 const ListItem = (props) => (
 
   <table>
-    {console.log('CHECKING FOR TURN: ', props.turn)}
     <tbody>
       <tr>
         <th>Player Name</th>

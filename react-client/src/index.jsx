@@ -125,27 +125,28 @@ class App extends React.Component {
   handleNextTurn(data) {
 
     var turn = Object.assign({},this.state.turn);
-    $.post('/turns', turn, function(data, status) {
-    })
-    var players = this.state.players.slice()
-    var nextPlayerIndex = players.indexOf(this.state.currentPlayer);
-    nextPlayerIndex++;
-    var nextPlayer = 0;
-    if(nextPlayerIndex > players.length - 1) {
-      nextPlayer = players[0]
-      turn.turnNum = turn.turnNum + 1;
+    $.post('/turns', turn, (data, status) => {
+      console.log('posted turn: ', data)
+      var players = this.state.players.slice()
+      var nextPlayerIndex = players.indexOf(this.state.currentPlayer);
+      nextPlayerIndex++;
+      var nextPlayer = 0;
+      if(nextPlayerIndex > players.length - 1) {
+        nextPlayer = players[0]
+        turn.turnNum = turn.turnNum + 1;
+        this.setState({
+          turn: turn
+        })
+      } else{
+        nextPlayer = players[nextPlayerIndex]
+      }
+      turn.playerName = nextPlayer
       this.setState({
-        turn: turn
+        turn: turn,
+        currentPlayer: nextPlayer
       })
-    } else{
-      nextPlayer = players[nextPlayerIndex]
-    }
-    turn.playerName = nextPlayer
-    this.setState({
-      turn: turn,
-      currentPlayer: nextPlayer
+      this.getPastTurns();
     })
-    this.getPastTurns();
   }
 
   getPastTurns() {
@@ -166,20 +167,6 @@ class App extends React.Component {
   }
 
 
-  displayTurns(data) {
-    //skeleton for now, needs work
-    $.ajax({
-      url: '/turns',
-      success: (data) => {
-        this.setState({
-          turn: data
-        })
-      },
-      error: (err) => {
-        console.log('err', err);
-      }
-    });
-  }
 
 
   render () {
