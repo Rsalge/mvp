@@ -210,9 +210,9 @@ class App extends React.Component {
     const turnStyle = {display: this.state.showTurn ? 'inline' : 'none' }
     return (<div>
       <h1>Settlers Tracker</h1>
-      <div><input type="button" value='Clear history' onClick={this.clearTable.bind(this)}/></div>
-      <form style={style} onSubmit={this.handleSubmit.bind(this)}>
-        <label>
+      <div><input type="button" id="clearHistory" value='Clear history' onClick={this.clearTable.bind(this)}/></div>
+      <form style={style} className='playerInput' onSubmit={this.handleSubmit.bind(this)}>
+        <label id = 'playerNum'>
           Number of players
           <input
             type="number"
@@ -221,7 +221,8 @@ class App extends React.Component {
             id="playerCount"
             value={this.state.playerCount}
             onChange={this.handlePlayerChange.bind(this)}
-          /><input
+          />
+          <input
             type="button"
             id="newGame"
             value="Get started"
@@ -232,7 +233,7 @@ class App extends React.Component {
 
 
       <form style={enterPlayerNames} onSubmit={this.handleSubmit.bind(this)} >
-        <label>
+        <label id="enterPlayers">
           Enter player names in order, start with who is going first
         </label>
         {this.state.players.map((player, index) => (
