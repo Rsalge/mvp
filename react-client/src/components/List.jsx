@@ -4,7 +4,8 @@ import ListItem from './ListItem.jsx';
 var key = 0;
 const List = (props) => (
     <div>
-      { props.turns.slice().reverse().map(turn => <ListItem key={turn.id} turn={turn}/>)}
+      {console.log('THIS IS THE GAME ID: ', props)}
+      { props.turns.slice().reverse().map(turn => <ListItem key={turn.id} currentGame={props.currentGame} turn={turn}/>)}
     </div>
 )
 

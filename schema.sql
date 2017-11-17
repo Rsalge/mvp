@@ -21,6 +21,7 @@ CREATE TABLE turns (
   roadLength integer NOT NULL,
   knightCount integer NOT NULL,
   turn integer NOT NULL,
+  game_id varchar(255),
   PRIMARY KEY (ID)
 );
 

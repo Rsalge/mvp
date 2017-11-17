@@ -18,7 +18,8 @@ class App extends React.Component {
         cities: 0,
         roadLength:1,
         knightCount:0,
-        turn: 0
+        turn: 0,
+        game_id: ''
       },
       playerCount: 0,
       players: [],
@@ -28,6 +29,15 @@ class App extends React.Component {
       showTurn: false,
       pastTurns: []
     }
+    this.setStore = this.setStore.bind(this)
+  }
+
+  onComponentMount() {
+
+  }
+
+  setStore(obj) {
+    this.setState(obj)
   }
 
   startTracking(data) {
@@ -45,21 +55,33 @@ class App extends React.Component {
   }
 
   handleClick(data) {
-      var count = Number(this.state.playerCount);
-      if (count > 7) {
-        count = 7;
-      }
-      this.setState({
-        showForm: !this.state.showForm,
-        showPlayerInput: !this.state.showPlayerInput,
-        players: Array(count).fill('')
-      })
+    // var randomGame = Math.floor(Math.random()*1000)
+    // var temp = Object.assign({}, this.state.turn);
+    // console.log('RANDOM GAME NUM', randomGame)
+    // temp.game_id = randomGame;
+    var count = Number(this.state.playerCount);
+    if (count > 7) {
+      count = 7;
+    }
+    this.setState({
+      // turn: temp,
+      playerCount: data.target.value,
+      showForm: !this.state.showForm,
+      showPlayerInput: !this.state.showPlayerInput,
+      players: Array(count).fill('')
+    })
   }
 
   handlePlayerChange(data) {
     this.setState({
       playerCount: data.target.value
     })
+  }
+
+  handleChange(data) {
+    var temp = Object.assign({}, this.state.turn);
+    temp.diceRoll = data.target.value;
+
   }
 
   handleDiceChange(data) {
@@ -195,12 +217,29 @@ class App extends React.Component {
     }
   }
 
-  clearTable() {
-    console.log('clearing table')
-    $.post('/clear', {name: 'asdf'}, function(data) {
-      console.log('POST SUCCESS: ', data)
+  getPreviousGames() {
+    $.ajax({
+      url: '/turns',
+      success: (data) => {
+        console.log('PREVIOUS TURN DATA: ', data);
+      },
+      error: (err) => {
+        console.log('err', err);
+      }
     });
   }
+
+  handleGameIdChange(data) {
+    var temp = Object.assign({}, this.state.turn);
+    temp.game_id = data.target.value;
+    this.setState({
+      turn: temp
+    })
+  }
+
+  // clearTable() {
+  //   $.post('/clear', {name: 'asdf'}, function(data) {});
+  // }
 
 
 
@@ -208,9 +247,12 @@ class App extends React.Component {
     const style = { display: this.state.showForm ? 'inline' : 'none' }
     const enterPlayerNames = {display: this.state.showPlayerInput ? 'inline' : 'none' }
     const turnStyle = {display: this.state.showTurn ? 'inline' : 'none' }
+    console.log('THIS IS THE TURN GAME ID: ', this.state.turn.game_id);
     return (<div>
       <h1>Settlers Tracker</h1>
-      <div><input type="button" id="clearHistory" value='Clear history' onClick={this.clearTable.bind(this)}/></div>
+      {/* <div><input type="button" id="clearHistory" value='Clear history' onClick={this.clearTable.bind(this)}/></div> */}
+      <div style={{margin:"10px"}}><input type="button" id="gameHistory" value='Previous Games' onClick={this.getPreviousGames.bind(this)}/></div>
+
       <form style={style} className='playerInput' onSubmit={this.handleSubmit.bind(this)}>
         <label id = 'playerNum'>
           Number of players
@@ -221,6 +263,12 @@ class App extends React.Component {
             id="playerCount"
             value={this.state.playerCount}
             onChange={this.handlePlayerChange.bind(this)}
+          />
+          <input
+            type="text"
+            id="game_id"
+            value={this.state.turn.game_id}
+            onChange={this.handleGameIdChange.bind(this)}
           />
           <input
             type="button"
@@ -324,7 +372,7 @@ class App extends React.Component {
           </tr>
         </tbody>
       </table>
-      <List turns={this.state.pastTurns}/>
+      <List currentGame={this.state.turn.game_id} turns={this.state.pastTurns}/>
     </div>)
   }
 }
